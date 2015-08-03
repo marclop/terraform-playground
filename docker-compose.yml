@@ -1,0 +1,18 @@
+---
+## Consul Container
+consul:
+  image: voxxit/consul:latest
+  ports:
+    - 8500:8500
+  volumes:
+    - ./consul.json:/etc/consul.json
+  command: "agent -config-file=/etc/consul.json"
+
+## Consul slave Container[s]
+consulSlave:
+  image: voxxit/consul:latest
+  links:
+    - consul:consul
+  volumes:
+    - ./consul-slave.json:/etc/consul.json
+  command: "agent -config-file=/etc/consul.json"
