@@ -1,13 +1,15 @@
 #!!/bin/bash
 
+CONSUL_NODES=3
+DOCKER_ENGINE_HOST="localhost"
+
 pre_run(){
     docker-compose up --x-smart-recreate -d > /dev/null 2>&1
-    docker-compose scale consulSlave=2 > /dev/null 2>&1
+    docker-compose scale consulSlave=$((CONSUL_NODES - 1)) > /dev/null 2>&1
 }
 
 terraform() {
   pre_run
-  ## Link with consul
   local IMAGE_NAME="uzyexe/terraform"
   local CONTAINER_NAME="terraform_consul_1"
 
@@ -39,14 +41,28 @@ consul() {
 }
 
 register_service() {
+  pre_run
   local SVC="$1"
   local FILE="consul/services/${SVC}.json"
   local SVC_IP=$(docker exec terraform_${SVC}_1 sh -c 'grep "$(hostname)" /etc/hosts | awk "{print \$1}"')
 
-  cp -f ${FILE}.dist ${FILE}
+  cp -f ${FILE}.dist ${FILE};
   sed -i "s/SVC_IP/${SVC_IP}/" ${FILE}
-  local RETURN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d @${FILE} http://localhost:8500/v1/agent/service/register)
+
+  local RETURN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d @${FILE} http://${DOCKER_ENGINE_HOST}:8500/v1/agent/service/register)
+
   echo "Status: ${RETURN_STATUS}"
   cat ${FILE}
   rm -f ${FILE}
+}
+
+query_service() {
+  pre_run
+  local SVC="$1"
+  local ADDR="${DOCKER_ENGINE_HOST}"
+  local SVC_RECORD="${SVC}.service.consul"
+  local PORT=8600
+  local TYPE="${2:-A}"
+
+  dig ${TYPE} +short @${ADDR} -p ${PORT} ${SVC_RECORD}
 }
