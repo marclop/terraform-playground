@@ -5,7 +5,7 @@ consul:
   ports:
     - 8500:8500
   volumes:
-    - ./consul.json:/etc/consul.json
+    - ./consul/consul.json:/etc/consul.json
   command: "agent -config-file=/etc/consul.json"
 
 ## Consul slave Container[s]
@@ -14,5 +14,19 @@ consulSlave:
   links:
     - consul:consul
   volumes:
-    - ./consul-slave.json:/etc/consul.json
+    - ./consul/consul-slave.json:/etc/consul.json # Mount consul-slave.json as config
   command: "agent -config-file=/etc/consul.json"
+
+## Vault
+vault:
+  image: voxxit/vault:latest
+  volumes:
+    - ./vault/vault.hcl:/etc/vault.hcl
+    - ./vault:/vault
+  links:
+    - "consul:consul"
+  ports:
+    - 8200:8200
+  environment:
+    - VAULT_ADDR=http://127.0.0.1:8200 ## Necessary to run commands trough the container
+  command: "server -config=/vault/vault.hcl"

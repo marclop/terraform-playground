@@ -1,0 +1,17 @@
+{
+  "ID": "vault",
+  "Name": "vault",
+  "Tags": [
+    "vault",
+    "v1"
+  ],
+  "Address": "SVC_IP",
+  "Port": 8200,
+  "Check": {
+    "Name": "Vault health check",
+    "http": "http://SVC_IP:8200/v1/sys/health",
+    "Notes": "HTTP based health check",
+    "Interval": "10s",
+    "Timeout": "2s"
+  }
+}
