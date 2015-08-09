@@ -1,7 +1,7 @@
 #!!/bin/bash
 
-CONSUL_NODES=3
-DOCKER_ENGINE_HOST="localhost"
+CONSUL_NODES=${CONSUL_NODES:-3}
+DOCKER_ENGINE_HOST="${DOCKER_ENGINE_HOST:-localhost}"
 
 pre_run(){
     docker-compose up --x-smart-recreate -d > /dev/null 2>&1
