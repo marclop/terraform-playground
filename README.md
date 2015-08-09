@@ -11,14 +11,17 @@ This repo contains terraform command inside a docker container with Consul as a 
 
 ## Environment settings
 
-Depending on which platform you run docker, you might need to adjust the variable `DOCKER_ENGINE_HOST` to point to your docker engine host (used for the script to query the consul nodes)
+Depending on which platform you run docker, you might need to adjust the variable `DOCKER_ENGINE_HOST` to point to your docker engine host (used for the script to query the consul nodes).
+
+Simply set those variables in the terminal, and the script `terraform.bash` will automatically respond to the settings (just remember to re-`source terraform.bash` every time you set a new value for those variables)
+
 ```
-DOCKER_ENGINE_HOST="localhost"
+$ DOCKER_ENGINE_HOST="localhost"
 ```
 
 You can also tune how many consul nodes will be spawned with the variable `CONSUL_NODES`
 ```
-CONSUL_NODES=3
+$ CONSUL_NODES=3
 ```
 
 ## Usage
