@@ -123,7 +123,9 @@ $ register_service vault
 
 ## Links
 
-* [Consul UI](localhost:8500/ui)
+* [Consul UI](http://localhost:8500/ui)
+* [Consul API](http://localhost:8500/v1)
+* [Vault API](http://localhost:8200/v1)
 
 ## Cleanup
 
