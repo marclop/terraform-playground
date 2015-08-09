@@ -6,6 +6,20 @@ This repo contains terraform command inside a docker container with Consul as a 
 
 * docker
 * docker-compose
+* dig
+* curl
+
+## Environment settings
+
+Depending on which platform you run docker, you might need to adjust the variable `DOCKER_ENGINE_HOST` to point to your docker engine host (used for the script to query the consul nodes)
+```
+DOCKER_ENGINE_HOST="localhost"
+```
+
+You can also tune how many consul nodes will be spawned with the variable `CONSUL_NODES`
+```
+CONSUL_NODES=3
+```
 
 ## Usage
 
@@ -13,9 +27,9 @@ This repo contains terraform command inside a docker container with Consul as a 
 
 #### Initialization
 
-
 ```
 $ source terraform.bash
+$ pre_run
 $ terraform_config
   Remote configuration updated
   Remote state configured and pulled.
